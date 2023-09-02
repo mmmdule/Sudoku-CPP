@@ -23,6 +23,7 @@
     <ProjectGuid>{F61F4CE1-5A12-4165-8EE0-156B4CFE9F8D}</ProjectGuid>
     <RootNamespace>SudokuVisualStudio2017</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Sudoku</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
