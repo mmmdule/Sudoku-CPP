@@ -6,4 +6,5 @@ All tables are read from and saved to external files.
 
 During the game you can write values, and undo or redo.
 
-Latest release and source code can be downloaded on [this link](https://github.com/mmmdule/Sudoku-CPP/releases/tag/test-release)
+Latest release and source code can be downloaded on [this link](https://github.com/mmmdule/Sudoku-CPP/releases/tag/test-release).
+The current release language is Serbian.
