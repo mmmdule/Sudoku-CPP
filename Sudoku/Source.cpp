@@ -1,4 +1,4 @@
-﻿#include "Klase.h"
+﻿#include "Classes.h"
 #include <iostream>
 #include <fcntl.h>
 #include <io.h>
@@ -23,14 +23,14 @@ void Puzzle(SudokuBase* SP);
 void Custom(SudokuBase* SC);
 
 int main(int argc, char* argv[]) {
-	SetWindowLongPtr(GetConsoleWindow(), GWL_STYLE, WS_POPUP); //Uklanja Top Bar
-	ShowWindow(GetConsoleWindow(), SW_MAXIMIZE); //Maximize za prozor
-	system("Color F0"); //Bela pozadina, crni tekst
+	SetWindowLongPtr(GetConsoleWindow(), GWL_STYLE, WS_POPUP); //Hides the console top bar
+	ShowWindow(GetConsoleWindow(), SW_MAXIMIZE); //Maximizes the console window
+	system("Color F0"); //Sets the background to white and text to black (Windows only)
 	
 	TitleScreen();
 	
 
-	srand(time(NULL)); //seed za random citanje
+	srand(time(NULL)); //seed for random
 
 	SudokuBase* Sudoku = NULL;
 

@@ -50,32 +50,30 @@ public:
 class SudokuBase {
 private:
 protected:
-	std::vector<Square<char>> matrica;
+	std::vector<Square<char>> matrix;
 	int printLineCount;
 	Move<char> Undo;
 
-	//pure virtual
+	// Pure virtual functions
 	virtual void PrintMatrix() = 0;
-	virtual void Opcije() = 0; 
-	virtual void UndoMove() = 0; 
+	virtual void Options() = 0;
+	virtual void UndoMove() = 0;
 	virtual void MakeMove() = 0;
 
-	bool CheckSolved(); //provera (najpre da li svaki ima vrednost, a ako ima onda se ide u proveru da li je sve tacno)
+	bool CheckSolved(); // Check if the puzzle is solved (first, whether each square has a value, and then if it's all correct)
 public:
 	SudokuBase();
-	virtual void Loop() = 0; //pure virtual
+	virtual void Loop() = 0; // Pure virtual function
 };
 
-class SudokuCustom : public SudokuBase { //Ova klasa sluzi za kreiranje i cuvanje u datoteci
+class SudokuCustom : public SudokuBase { // This class is used for creating and saving to a file
 private:
-	//std::string tableName;
 protected:
-	//preklopljene virtual iz SudokuBase
+	// Overridden virtual functions from SudokuBase
 	void PrintMatrix();
-	void Opcije(); //Ima osnovne opcije za setField i undo
-	void UndoMove(); //Samo undo prethodnog poteza, bez stack-a
+	void Options(); // Basic options for setField and undo
+	void UndoMove(); // Undo the previous move without using a stack
 	void MakeMove();
-	//preklopljene virtual iz SudokuBase
 
 	void SaveToFile();
 public:
@@ -84,7 +82,7 @@ public:
 };
 
 class SudokuPuzzle : public SudokuBase {
-	//Ova klasa cita iz fajla i onda se resava
+	// This class reads from a file and then solves the puzzle
 private:
 	std::stack<Move<char>> UndoStack;
 	std::stack<Move<char>> RedoStack;
@@ -93,15 +91,14 @@ private:
 
 protected:
 
-	//preklopljene virtual iz SudokuBase
-	void PrintMatrix(); //Read-only polja - crna sa belim tekstom 
-	void Opcije();
+	// Overridden virtual functions from SudokuBase
+	void PrintMatrix(); // Read-only fields - black background with white text 
+	void Options();
 	void UndoMove();
 	void MakeMove();
-	//preklopljene virtual iz SudokuBase
 
 	void ReadFromFile();
-	void ReadOnlyPrint(bool isReadOnly, int i, HANDLE hConsole); //Proverava da li je polje Read-Only. Poziva se unutar PrintMatrix
+	void ReadOnlyPrint(bool isReadOnly, int i, HANDLE hConsole); // Check if the field is Read-Only. Called within PrintMatrix
 	void RedoMove();
 	void PrintUndoStack();
 

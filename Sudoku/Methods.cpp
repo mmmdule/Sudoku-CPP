@@ -1,4 +1,4 @@
-﻿#include "Klase.h"
+﻿#include "Classes.h"
 #include <iostream>
 #include <fcntl.h>
 #include <io.h>
@@ -19,59 +19,56 @@
 
 
 
-
-//KORISTI WCOUT umesto cout kada je MOD POSTAVLJEN NA  _O_U16TEXT
-
-//Template Klasa Potez
-template <typename T> Potez<T>::Potez()
+//Template class Move
+template <typename T> Move<T>::Move()
 {
 
 }
 template<typename T>
-Potez<T>::Potez(T value, int index)
+Move<T>::Move(T value, int index)
 {
 	this->value = value;
 	this->index = index;
 }
 template<typename T>
-void Potez<T>::Set(T value, int index)
+void Move<T>::Set(T value, int index)
 {
 	this->value = value;
 	this->index = index;
 }
 template<typename T>
-T & Potez<T>::Value()
+T & Move<T>::Value()
 {
 	return value;
 }
 template<typename T>
-int & Potez<T>::Index()
+int &Move<T>::Index()
 {
 	return index;
 }
-//Template Klasa Potez
+//Template class Move
 
-//Template Klasa Polje
-template <typename T> Polje<T>::Polje()
+//Template class Square
+template <typename T> Square<T>::Square()
 {
 	this->read_only = false;
 }
 
-template <typename T> Polje<T>::Polje(T fieldValue)
+template <typename T> Square<T>::Square(T fieldValue)
 {
 	this->prev_value = NULL;
 	this->value = fieldValue;
 	this->read_only = false;
 }
 
-template <typename T> Polje<T>::Polje(T fieldValue, bool readOnly)
+template <typename T> Square<T>::Square(T fieldValue, bool readOnly)
 {
 	this->prev_value = NULL;
 	this->value = fieldValue;
 	this->read_only = readOnly;
 }
 
-template <typename T> void Polje<T>::setField(T val)
+template <typename T> void Square<T>::setField(T val)
 {
 	if (!this->read_only) {
 		this->prev_value = this->value;
@@ -79,35 +76,35 @@ template <typename T> void Polje<T>::setField(T val)
 	}		
 }
 
-template <typename T> bool& Polje<T>::ReadOnly()
+template <typename T> bool& Square<T>::ReadOnly()
 {
 	return read_only;
 }
 
-template <typename T> void Polje<T>::setField(T val, bool ReadOnly)
+template <typename T> void Square<T>::setField(T val, bool ReadOnly)
 {
 	read_only = ReadOnly;
 	prev_value = value;
 	value = val;
 }
 
-template <typename T> T& Polje<T>::Value()
+template <typename T> T& Square<T>::Value()
 {
 	return this->value;
 }
 
-template <typename T> T& Polje<T>::PrevValue()
+template <typename T> T& Square<T>::PrevValue()
 {
 	return this->prev_value;
 }
-//Template Klasa Polje
+//Template class Square
 
-//Klasa SudokuBase
+//SudokuBase class
 SudokuBase::SudokuBase() {
 	printLineCount = 0;
-	matrica.resize(81);
+	matrix.resize(81);
 	for (int i = 0; i < 81; i++)
-		matrica.at(i).setField('0', false);
+		matrix.at(i).setField('0', false);
 	Undo.Value() = 'x';
 }
 
@@ -124,12 +121,12 @@ bool SudokuBase::CheckSolved()
 
 
 
-	//provera horizontalno
+	//check horizontal
 	for (int i = 0; i < 81; i++) {
-		vect[j].push_back(matrica.at(i).Value());
+		vect[j].push_back(matrix.at(i).Value());
 		if ((i + 1) % 9 == 0)
 			j++;
-		if (!(matrica.at(i).Value() >= '1' && matrica.at(i).Value() <= '9'))
+		if (!(matrix.at(i).Value() >= '1' && matrix.at(i).Value() <= '9'))
 			return false;
 	}
 
@@ -139,9 +136,9 @@ bool SudokuBase::CheckSolved()
 		if (hasDuplicates)
 			return false;
 	}
-	//provera horizontalno
+	//check horizontal
 
-	//provera vertikalno
+	//check vertical
 	j = 0;
 	for (int i = 0; i < 9; i++) {
 		vect[i].clear();
@@ -149,7 +146,7 @@ bool SudokuBase::CheckSolved()
 
 	for (int i = 0; i < 9; i++) {
 		for (j = 0; j < 9; j++)
-			vect[i].push_back(matrica.at(i + (9 * j)).Value());
+			vect[i].push_back(matrix.at(i + (9 * j)).Value());
 	}
 
 	for (int i = 0; i < 9; i++) {
@@ -159,38 +156,38 @@ bool SudokuBase::CheckSolved()
 			return false;
 	}
 
-	//provera vertikalno
+	//check vertical
 	return true;
 }
-//Klasa SudokuBase
+//SudokuBase class
 
-//Klasa SudokuPuzzle
+//SudokuPuzzle class
 SudokuPuzzle::SudokuPuzzle() {
 	for (int i = 0; i < 81; i++)
-			matrica.at(i).setField('X', false);
+			matrix.at(i).setField('X', false);
 }
 
-void SudokuPuzzle::Opcije()
+void SudokuPuzzle::Options()
 {
-	_setmode(_fileno(stdout), _O_U16TEXT); // UTF-8
+	_setmode(_fileno(stdout), _O_U16TEXT);
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	std::wcout << "Opcije:  ";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); //Tamna pozadina, svetli tekst
+	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); //dark background, light text
 	std::wcout << "(S)et";
-	SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); //Svetla pozadina, tamni tekst
+	SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); //light background, dark text
 	std::wcout << "\t";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); //Tamna pozadina, svetli tekst
+	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); //dark background, light text
 	std::wcout << "(U)ndo";
-	SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); //Svetla pozadina, tamni tekst
+	SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); //light background, dark text
 	std::wcout << "\t";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); //Tamna pozadina, svetli tekst
+	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); //dark background, light text
 	std::wcout << "(R)edo";
-	SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); //Svetla pozadina, tamni tekst
+	SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); //light background, dark text
 	std::wcout << "\t";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); //Tamna pozadina, svetli tekst
+	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); //dark background, light text
 	std::wcout << "(E)xit";
-	SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); //Svetla pozadina, tamni tekst
+	SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); //light background, dark text
 	std::wcout << " ";
 	std::wcout << std::endl << std::endl;
 }
@@ -198,17 +195,17 @@ void SudokuPuzzle::Opcije()
 void SudokuPuzzle::ReadOnlyPrint(bool isReadOnly, int i, HANDLE hConsole) {
 	if (isReadOnly) {
 		SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
-		std::wcout << matrica.at(i).Value();
+		std::wcout << matrix.at(i).Value();
 		SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY);
 	}
 	else
-		std::wcout << matrica.at(i).Value();
+		std::wcout << matrix.at(i).Value();
 }
 
 
 
 void SudokuPuzzle::PrintMatrix() {
-	_setmode(_fileno(stdout), _O_U16TEXT); // UTF-8
+	_setmode(_fileno(stdout), _O_U16TEXT); 
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	int i = 0;
@@ -224,7 +221,7 @@ void SudokuPuzzle::PrintMatrix() {
 
 		for (int j = tmp; j < tmp+9; j++) {
 
-			this->ReadOnlyPrint(matrica.at(j).ReadOnly(), j, hConsole);
+			this->ReadOnlyPrint(matrix.at(j).ReadOnly(), j, hConsole);
 			if( (j+1) % 3 == 0 )
 				std::wcout << L"║";
 			else
@@ -252,7 +249,7 @@ void SudokuPuzzle::PrintMatrix() {
 void SudokuPuzzle::ReadFromFile() {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	_setmode(_fileno(stdout), _O_U16TEXT);
-	matrica.clear();
+	matrix.clear();
 
 	system("cls");
 	bool readCustom = false;
@@ -324,8 +321,6 @@ void SudokuPuzzle::ReadFromFile() {
 
 		broj = _getch();
 
-		//For Debugging
-		//std::wcout << std::to_wstring(broj) << "\n";
 				
 		while (broj <= '1' && broj >= '3' && broj != 's' && broj != 'S') {
 			std::wcout << "Neispravan broj tezine! Unesite ponovo. (1 do 3)" << std::endl;
@@ -334,14 +329,6 @@ void SudokuPuzzle::ReadFromFile() {
 		}
 		stringPath.clear();
 		stringPath.append("./Tables/");
-
-		//For Debugging
-		/*
-		_setmode(_fileno(stdout), _O_TEXT);
-		std::cout << stringPath << std::endl;
-		_setmode(_fileno(stdout), _O_U16TEXT);
-		*/
-		//For Debugging
 
 		switch (broj)
 		{
@@ -384,12 +371,12 @@ void SudokuPuzzle::ReadFromFile() {
 	char c = inStream.get();
 	while (!(inStream.eof())) {
 		if (c == 'x') {
-			matrica.push_back(Polje<char>(' ', false));
+			matrix.push_back(Square<char>(' ', false));
 
 			i++;
 		}
 		else if (c != ',' && c != inStream.eof() && c != '\n') {
-			matrica.push_back(Polje<char>(c, true));
+			matrix.push_back(Square<char>(c, true));
 			
 
 			i++;
@@ -475,9 +462,9 @@ void SudokuPuzzle::MakeMove()
 		value = _getch();
 	}
 
-	this->UndoStack.push(Potez<char>(matrica.at(multiplier).Value(), multiplier));
+	this->UndoStack.push(Move<char>(matrix.at(multiplier).Value(), multiplier));
 
-	this->matrica.at(multiplier).setField(value);
+	this->matrix.at(multiplier).setField(value);
 
 	
 }
@@ -486,15 +473,15 @@ void SudokuPuzzle::UndoMove()
 	if (UndoStack.empty())
 		return;
 
-	Potez<char> undoPotez = UndoStack.top();
+	Move<char> undoMove = UndoStack.top();
 	UndoStack.pop();
 
 	while (!(RedoStack.empty()))
 		RedoStack.pop();
-	RedoStack.push(Potez<char>(matrica.at(undoPotez.Index()).Value(), undoPotez.Index()));
+	RedoStack.push(Move<char>(matrix.at(undoMove.Index()).Value(), undoMove.Index()));
 
-	matrica.at(undoPotez.Index()).PrevValue() = matrica.at(undoPotez.Index()).Value();
-	matrica.at(undoPotez.Index()).Value() = undoPotez.Value();
+	matrix.at(undoMove.Index()).PrevValue() = matrix.at(undoMove.Index()).Value();
+	matrix.at(undoMove.Index()).Value() = undoMove.Value();
 }
 
 void SudokuPuzzle::RedoMove()
@@ -502,11 +489,11 @@ void SudokuPuzzle::RedoMove()
 	if (RedoStack.empty())
 		return;
 
-	Potez<char> redoPotez = RedoStack.top();
+	Move<char> redoMove = RedoStack.top();
 	RedoStack.pop();
-	UndoStack.push(Potez<char>(matrica.at(redoPotez.Index()).Value(), redoPotez.Index()));
-	matrica.at(redoPotez.Index()).PrevValue() = matrica.at(redoPotez.Index()).Value();
-	matrica.at(redoPotez.Index()).Value() = redoPotez.Value();
+	UndoStack.push(Move<char>(matrix.at(redoMove.Index()).Value(), redoMove.Index()));
+	matrix.at(redoMove.Index()).PrevValue() = matrix.at(redoMove.Index()).Value();
+	matrix.at(redoMove.Index()).Value() = redoMove.Value();
 }
 void SudokuPuzzle::PrintUndoStack()
 {
@@ -525,7 +512,7 @@ void SudokuPuzzle::Loop()
 		system("cls");
 		this->PrintMatrix();
 		std::wcout << std::endl;
-		this->Opcije();
+		this->Options();
 		char opcija = _getch();
 		opcija = tolower(opcija);
 		switch (opcija) {
@@ -539,12 +526,11 @@ void SudokuPuzzle::Loop()
 					std::wcout << "Uspesno reseno!\n\n"; 
 					printLineCount = 0;
 					system("pause");
-					return; //0;
+					return;
 				}
 				break;
 			case 'u': //undo
 				this->UndoMove();
-				//SP.PrintUndoStack();
 				break;
 			case 'r':
 				this->RedoMove();
@@ -553,21 +539,21 @@ void SudokuPuzzle::Loop()
 				std::wcout << std::endl << "EXITING" << std::endl;
 				printLineCount = 0;
 				system("pause");
-				return; //0;
+				return;
 			default:
 				break;
 		}
 		
 	}
 }
-//Klasa SudokuPuzzle
+// SudokuPuzzle class
 
-//Klasa SudokuCustom
+// SudokuCustom class
 void SudokuCustom::PrintMatrix()
 {
 	
 
-	_setmode(_fileno(stdout), _O_U16TEXT); // UTF-8
+	_setmode(_fileno(stdout), _O_U16TEXT); 
 	
 
 	int i = 0;
@@ -585,7 +571,7 @@ void SudokuCustom::PrintMatrix()
 			slovoPrint = true;
 		}
 
-		std::wcout << matrica.at(i).Value();
+		std::wcout << matrix.at(i).Value();
 		std::wcout << L"│";
 
 
@@ -606,7 +592,7 @@ void SudokuCustom::PrintMatrix()
 }
 
 
-void SudokuCustom::Opcije()
+void SudokuCustom::Options()
 {
 	_setmode(_fileno(stdout), _O_U16TEXT); // UTF-8
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -614,21 +600,21 @@ void SudokuCustom::Opcije()
 
 
 	std::wcout << "Opcije:  ";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); //Tamna pozadina, svetli tekst
+	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); //dark background, light text
 	std::wcout << "(S)et";
-	SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); //Svetla pozadina, tamni tekst
+	SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); //light background, dark text
 	std::wcout << " " << " ";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); //Tamna pozadina, svetli tekst
+	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); //dark background, light text
 	std::wcout << "(F)inish";
-	SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); //Svetla pozadina, tamni tekst
+	SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); //light background, dark text
 	std::wcout << " " << " ";
-	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); //Tamna pozadina, svetli tekst
+	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); //dark background, light text
 	std::wcout << "(U)ndo";
-	SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); //Svetla pozadina, tamni tekst
-	std::wcout << " " << " "; 
-	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); //Tamna pozadina, svetli tekst
+	SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); //light background, dark text
+	std::wcout << " " << " ";
+	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED); //dark background, light text
 	std::wcout << "(E)xit" << std::endl << std::endl;
-	SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); //Svetla pozadina, tamni tekst
+	SetConsoleTextAttribute(hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY); //light background, dark text
 }
 
 void SudokuCustom::UndoMove()
@@ -636,11 +622,11 @@ void SudokuCustom::UndoMove()
 	if (Undo.Value() == 'x')
 		return;
 
-	Potez<char> undoPotez = Undo;
+	Move<char> undoMove = Undo;
 
 
-	matrica.at(undoPotez.Index()).PrevValue() = matrica.at(undoPotez.Index()).Value();
-	matrica.at(undoPotez.Index()).Value() = undoPotez.Value();
+	matrix.at(undoMove.Index()).PrevValue() = matrix.at(undoMove.Index()).Value();
+	matrix.at(undoMove.Index()).Value() = undoMove.Value();
 
 	Undo.Value() = 'x';
 }
@@ -715,9 +701,9 @@ void SudokuCustom::MakeMove()
 		value = _getch();
 	}
 
-	Undo = Potez<char>(matrica.at(multiplier).Value(), multiplier);
+	Undo = Move<char>(matrix.at(multiplier).Value(), multiplier);
 
-	this->matrica.at(multiplier).setField(value);
+	this->matrix.at(multiplier).setField(value);
 
 }
 
@@ -753,10 +739,10 @@ void SudokuCustom::SaveToFile()
 	inStream.open(saveName, std::fstream::out);
 
 	for (int i = 0; i < 81; i++) {
-		if (matrica.at(i).Value() == ' ')
+		if (matrix.at(i).Value() == ' ')
 			inStream.put('x');
 		else
-			inStream.put(matrica.at(i).Value());
+			inStream.put(matrix.at(i).Value());
 
 		if (i < 80 && ((i + 1) % 9 != 0))
 			inStream.put(',');
@@ -770,7 +756,7 @@ void SudokuCustom::SaveToFile()
 	std::wcout << "Uspesno sacuvano!\n";
 	_getch();
 	for (int i = 0; i < 81; i++)
-		matrica.at(i).setField(' ', false);
+		matrix.at(i).setField(' ', false);
 	system("cls");
 
 	Sleep(200);
@@ -778,7 +764,7 @@ void SudokuCustom::SaveToFile()
 
 SudokuCustom::SudokuCustom() {
 	for (int i = 0; i < 81; i++)
-		matrica.at(i).setField(' ', false);
+		matrix.at(i).setField(' ', false);
 }
 
 void SudokuCustom::Loop()
@@ -817,12 +803,12 @@ void SudokuCustom::Loop()
 			std::wcout << std::endl << "EXITING" << std::endl;
 			printLineCount = 0;
 			system("pause");
-			return; //0;
+			return;
 		default:
 			break;
 		}
 
 	}
-	return; //0;
+	return;
 }
 //Klasa SudokuCustom
